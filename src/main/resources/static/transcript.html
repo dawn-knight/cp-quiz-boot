@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script>
+      function getTranscript() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("div_transcript").innerHTML = this.responseText;
+          }
+        }
+        xhttp.open("GET", "/exam/transcript", true);
+        xhttp.send();
+      }
+    </script>
+  </head>
+  <body onload="getTranscript()">
+    <h1>The second page</h1>
+    <div id="div_transcript"></div>
+  </body>
+</html>

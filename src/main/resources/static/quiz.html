@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script lang="javascript">
+      var tests_obj;
+      var index = 0;
+      var options = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+      var results = {};
+      function collect_result() {
+        var result = {};
+        result.tid = tests_obj.items[index-1].tid;
+        var radioes = document.getElementsByName(tests_obj.items[index-1].tid);
+        for (i = 0; i < radioes.length; i++) {
+        	if(radioes[i].checked == true) {
+        		result.answer = radioes[i].value;
+        		break;
+        	}
+        }
+        results[index-1] = result;
+      }
+      function forword_or_submit(button) {
+        collect_result();
+        if (index <= tests_obj.items.length - 1) {
+          if (index == tests_obj.items.length - 1) {
+            button.value = "submit";
+          }
+          generate_content();
+        } else {
+          button.disabled = true;
+          var xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "/exam/submit", true);
+          xhttp.send(JSON.stringify(results));
+          window.location = "transcript.html";
+        }
+      }
+      function precompile() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            document.getElementById('compile_result_msg').innerHTML = this.responseText;
+          }
+        }
+        xhttp.open("POST", "/exam/precompile", true);
+        xhttp.send(document.getElementById("source").value);
+      }
+      function get_tests() {
+        if (typeof tests_obj == "undefined" || tests_obj == null) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+              tests_obj = JSON.parse(this.responseText);
+              generate_content();
+            }
+          }
+          xhttp.open("GET", "/exam/tests", true);
+          xhttp.send();
+        }
+      }
+      function generate_content() {
+        document.getElementById("topic").innerHTML = tests_obj.items[index].topic;
+        if (tests_obj.items[index].type == 1) {
+          document.getElementById("textarea").style.visibility = "hidden";
+          var inner_content_str = null;
+          for (i = 0; i < tests_obj.items[index].options.length; i++) {
+            var tmp = options[i] + "<input type='radio' name='" + tests_obj.items[index].tid + "' value='" + options[i] + "' />" + tests_obj.items[index].options[i] + " ";
+            if (inner_content_str == null) {
+              inner_content_str = tmp;
+            } else {
+              inner_content_str = inner_content_str + tmp;
+            }
+          }
+          document.getElementById("multiple_choice").innerHTML = inner_content_str;
+        }
+        index++;
+      }
+      function inquire() {
+        if(index > 1) {
+          return "quit test?";
+        }
+      }
+    </script>
+  </head>
+  <body onload="get_tests()" onbeforeunload="return inquire()">
+    <div id="topic"></div>
+    <form>
+      <div id="multiple_choice"></div>
+      <div id="textarea">
+        <textarea id="source" onblur="precompile()"></textarea>
+      </div>
+      <div id="compile_result_msg"></div>
+      <input id="next_button" type="button" value="next" onclick="forword_or_submit(this)" />
+    </form>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <classPathEntry location="C:\Users\HQ01UC510\.m2\repository\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar" />
+  <context id="context1">
+    <jdbcConnection connectionURL="jdbc:mysql://127.0.0.1:3306/cp_quiz?characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver" password="" userId="root" />
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+    <javaModelGenerator targetPackage="com.dk.cp.quiz.model" targetProject="F:\workspaces\luna-jee\cp-exam-boot\src\main\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    <sqlMapGenerator targetPackage="com.dk.cp.quiz.mapper" targetProject="F:\workspaces\luna-jee\cp-exam-boot\src\main\resources" >
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+    <javaClientGenerator targetPackage="com.dk.cp.quiz.dao" targetProject="F:\workspaces\luna-jee\cp-exam-boot\src\main\java" type="XMLMAPPER">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+    <table tableName="quiz_choice_draft" domainObjectName="ChoiceDraft">
+      <columnOverride column="drafter_id" property="drafterId" />
+      <columnOverride column="created_time" property="createTime"></columnOverride>
+      <columnOverride column="image_id" property="imageId"></columnOverride>
+    </table>
+    <table tableName="quiz_choice_option" domainObjectName="ChoiceOption" />
+  </context>
+</generatorConfiguration>
